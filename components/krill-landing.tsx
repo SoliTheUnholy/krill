@@ -44,9 +44,9 @@ export default function KrillLanding() {
 
   return (
     <OceanScroll>
-      <ScrollTracker />
-      <main className="overflow-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-        <section className="relative isolate min-h-screen overflow-hidden border-b border-border px-5 pb-20 pt-5 sm:px-8 lg:px-12">
+      <main className="relative overflow-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
+        <ScrollTracker />
+        <section className="relative z-10 isolate min-h-screen overflow-hidden border-b border-border px-5 pb-20 pt-5 sm:px-8 lg:px-12">
           <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_80%_18%,color-mix(in_oklch,var(--primary),transparent_80%),transparent_44%),radial-gradient(ellipse_at_10%_100%,color-mix(in_oklch,var(--chart-2),transparent_94%),transparent_45%)]" />
           <div className="pointer-events-none absolute inset-0 -z-10 opacity-30 [background-image:radial-gradient(color-mix(in_oklch,var(--primary-foreground),transparent_75%)_0.7px,transparent_0.7px)] [background-size:14px_14px]" />
           <div className="mx-auto max-w-7xl">
@@ -83,7 +83,7 @@ export default function KrillLanding() {
           </div>
         </section>
 
-        <section id="process" className="relative border-b border-border px-5 py-20 sm:px-8 lg:px-12 lg:py-28" data-scroll-section>
+        <section id="process" className="relative z-10 border-b border-border px-5 py-20 sm:px-8 lg:px-12 lg:py-28" data-scroll-section>
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
               <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-primary">No black water</p><h2 className="mt-4 max-w-md font-serif text-5xl leading-[.88] tracking-[-.075em] sm:text-6xl">A clear path below the surface.</h2></div>
@@ -101,7 +101,7 @@ export default function KrillLanding() {
           </div>
         </section>
 
-        <section id="why-krill" className="relative px-5 py-20 sm:px-8 lg:px-12 lg:py-28" data-scroll-section>
+        <section id="why-krill" className="relative z-10 px-5 py-20 sm:px-8 lg:px-12 lg:py-28" data-scroll-section>
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_0%_50%,color-mix(in_oklch,var(--primary),transparent_90%),transparent_35%)]" />
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
             <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-primary">Beyond decoration</p><h2 className="mt-4 max-w-lg font-serif text-5xl leading-[.88] tracking-[-.075em] sm:text-6xl">A website that behaves like a brand, not a brochure.</h2></div>
@@ -118,7 +118,7 @@ export default function KrillLanding() {
 
         <OrderBriefEstimator />
 
-        <footer className="border-t border-border px-5 py-8 sm:px-8 lg:px-12">
+        <footer className="relative z-10 border-t border-border px-5 py-8 sm:px-8 lg:px-12">
           <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 sm:flex-row sm:items-center"><KrillLogo /><p className="text-sm text-muted-foreground">For brands ready to find their own current.</p><button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm font-medium text-primary hover:text-foreground">Return to the surface ↑</button></div>
         </footer>
       </main>

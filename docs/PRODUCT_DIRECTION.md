@@ -10,7 +10,7 @@ The homepage should never become a generic agency template. Its job is to make t
 
 - The visual system uses the dark token set in `app/globals.css`. Prefer semantic Tailwind classes such as `bg-background`, `text-foreground`, `bg-card`, `border-border`, and `text-primary`; do not introduce a competing colour system in components.
 - `components/ocean-scroll.tsx` owns the Locomotive Scroll lifecycle and publishes a `krill:scroll` browser event.
-- `components/scroll-tracker.tsx` reads that event and renders the fixed progress indicator with Framer Motion.
+- `components/scroll-tracker.tsx` reads that event and renders the fixed progress indicator plus the low-contrast, krill-tipped SVG track with Framer Motion.
 - Framer Motion is used for reveal and ambient motion. Respect `prefers-reduced-motion`; Locomotive Scroll deliberately falls back to native scrolling when it is enabled.
 
 ## The order signal
@@ -22,9 +22,13 @@ The estimator is not a contact form. It collects enough structured context to su
 | The signal | Brand name, category, brand idea, audience | Gives strategy and an LLM the non-generic context that differentiates the site. |
 | The job | Project type and primary outcome | Determines the main customer journey and conversion architecture. |
 | The system | Required features and project scale | Separates a story site from commerce, bookings, accounts, memberships, or a bespoke product. |
-| The character | Creative direction, content readiness, urgency, references | Defines the aesthetic route, production work, timing, and price pressure. |
+| The character | Website style, content readiness, urgency, references | Defines the aesthetic route, production work, timing, and price pressure. |
 
-`lib/order-brief.ts` is the canonical schema, option source, and deterministic ballpark calculator. Keep its stable option IDs when changing labels or editorial copy. A future order API should store this object exactly and use the same IDs in the implementation prompt.
+`lib/order-brief.ts` is the canonical schema, option source, Zod validation contract, and deterministic ballpark calculator. `components/order-options.tsx` is the reusable, icon-led control layer. Keep stable option IDs when changing labels or editorial copy. A future order API should store this object exactly and use the same IDs in the implementation prompt.
+
+## Mobile form constraint
+
+The public order section is deliberately `100svh` on mobile. It must not grow the page into a long form. The active chapter scrolls **inside** the form body (`data-lenis-prevent`) while the progress header and next/back actions remain visible. Preserve this constraint when adding fields: either keep a step compact or add a new chapter rather than making the outer section taller.
 
 ## Estimator policy
 
@@ -52,7 +56,8 @@ Do not hard-code a login or payment route until the auth and payment providers a
 ## Component map
 
 - `components/krill-landing.tsx`: composition and editorial landing sections only.
-- `components/order-brief.tsx`: client-side multi-step brief UI and estimate reveal.
+- `components/order-brief.tsx`: React Hook Form + Zod multi-step brief UI and estimate reveal.
+- `components/order-options.tsx`: icon-backed radio and multi-select option controls built from shadcn/Base UI primitives.
 - `components/krill-logo.tsx`: reusable brand mark.
 - `components/ocean-scroll.tsx`: smooth-scroll lifecycle and scroll event bridge.
 - `components/scroll-tracker.tsx`: visual progress tracker.
