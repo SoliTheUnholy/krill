@@ -9,26 +9,26 @@ The homepage should never become a generic agency template. Its job is to make t
 ## Current experience
 
 - The visual system uses the dark token set in `app/globals.css`. Prefer semantic Tailwind classes such as `bg-background`, `text-foreground`, `bg-card`, `border-border`, and `text-primary`; do not introduce a competing colour system in components.
-- `components/ocean-scroll.tsx` owns the Locomotive Scroll lifecycle and publishes a `krill:scroll` browser event.
-- `components/scroll-tracker.tsx` reads that event and renders the fixed progress indicator plus the low-contrast, krill-tipped SVG track with Framer Motion.
+- `components/ocean-scroll.tsx` owns the Locomotive Scroll lifecycle. There is intentionally no visual scroll tracker.
 - Framer Motion is used for reveal and ambient motion. Respect `prefers-reduced-motion`; Locomotive Scroll deliberately falls back to native scrolling when it is enabled.
 
 ## The order signal
 
 The estimator is not a contact form. It collects enough structured context to support an initial estimate and, later, a detailed internal build prompt.
 
-| Chapter | Captured information | Why it matters |
+| Chapters | Captured information | Why it matters |
 | --- | --- | --- |
-| The signal | Brand name, category, brand idea, audience | Gives strategy and an LLM the non-generic context that differentiates the site. |
-| The job | Project type and primary outcome | Determines the main customer journey and conversion architecture. |
-| The system | Required features and project scale | Separates a story site from commerce, bookings, accounts, memberships, or a bespoke product. |
-| The character | Website style, content readiness, urgency, references | Defines the aesthetic route, production work, timing, and price pressure. |
+| Brand + audience | Name, category, brand idea, audience | Gives strategy and an LLM the non-generic context that differentiates the site. |
+| Outcome + shape + scale | Primary outcome, delivery type, content scope | Determines the main customer journey and size of the content architecture. |
+| Essentials + systems | Foundation and advanced capabilities | Separates a simple presence from commerce, accounts, dashboards, integrations, or bespoke application logic. |
+| Style + motion | Visual language and movement level | Defines creative direction plus motion, accessibility, and performance effort. |
+| Readiness + timing | Brand/content state, urgency, references | Accounts for missing production materials and scheduling pressure. |
 
-`lib/order-brief.ts` is the canonical schema, option source, Zod validation contract, and deterministic ballpark calculator. `components/order-options.tsx` is the reusable, icon-led control layer. Keep stable option IDs when changing labels or editorial copy. A future order API should store this object exactly and use the same IDs in the implementation prompt.
+Order logic is deliberately split by responsibility: `lib/order/types.ts` owns stable IDs and the Zod contract, `lib/order/options.ts` owns customer-facing choices and their cost metadata, and `lib/order/pricing.ts` owns the deterministic calculator. Keep stable option IDs when changing labels or editorial copy. A future order API should store this object exactly and use the same IDs in the implementation prompt.
 
 ## Mobile form constraint
 
-The public order section is deliberately `100svh` on mobile. It must not grow the page into a long form. The active chapter scrolls **inside** the form body (`data-lenis-prevent`) while the progress header and next/back actions remain visible. Preserve this constraint when adding fields: either keep a step compact or add a new chapter rather than making the outer section taller.
+The public order section is deliberately `100svh` on mobile. Neither the form nor an inner form region should scroll. Each chapter must fit between the persistent progress header and navigation footer. Preserve this constraint when adding fields: add a chapter or shorten an existing one rather than introducing `overflow-y-auto`.
 
 ## Estimator policy
 
@@ -56,16 +56,19 @@ Do not hard-code a login or payment route until the auth and payment providers a
 ## Component map
 
 - `components/krill-landing.tsx`: composition and editorial landing sections only.
-- `components/order-brief.tsx`: React Hook Form + Zod multi-step brief UI and estimate reveal.
-- `components/order-options.tsx`: icon-backed radio and multi-select option controls built from shadcn/Base UI primitives.
+- `components/order-brief.tsx`: stable public export consumed by the landing page.
+- `components/order-form/order-form.tsx`: React Hook Form orchestration, validation, navigation, and viewport contract.
+- `components/order-form/order-steps.tsx`: ordered question chapters and per-step validation fields.
+- `components/order-form/order-fields.tsx`: reusable shadcn/RHF field bindings.
+- `components/order-form/order-option.tsx`: compact icon-backed radio and multi-select controls.
+- `components/order-form/order-estimate.tsx`: estimate reveal and authentication handoff.
 - `components/krill-logo.tsx`: reusable brand mark.
-- `components/ocean-scroll.tsx`: smooth-scroll lifecycle and scroll event bridge.
-- `components/scroll-tracker.tsx`: visual progress tracker.
+- `components/ocean-scroll.tsx`: smooth-scroll lifecycle.
 - `components/ui/`: generated Base UI / shadcn primitives; prefer these over new one-off controls.
 
 ## Working conventions
 
 - Keep server pages thin. Put interactive state in a narrowly scoped client component.
-- Keep all pricing logic and order vocabulary in `lib/order-brief.ts`.
+- Keep validation/types, options, and pricing in their respective `lib/order/` modules.
 - Rebuild after changing tokens, animation dependencies, or component contracts: `pnpm build`.
 - The full lint command currently includes inherited warnings/errors in unused generated components. Validate changed files directly as well as running the production build.

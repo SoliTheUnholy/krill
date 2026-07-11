@@ -7,7 +7,6 @@ import { useState } from "react";
 import { KrillLogo } from "@/components/krill-logo";
 import { OceanScroll } from "@/components/ocean-scroll";
 import { OrderBriefEstimator } from "@/components/order-brief";
-import { ScrollTracker } from "@/components/scroll-tracker";
 import { Button } from "@/components/ui/button";
 
 function TideOrb() {
@@ -45,7 +44,6 @@ export default function KrillLanding() {
   return (
     <OceanScroll>
       <main className="relative overflow-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-        <ScrollTracker />
         <section className="relative z-10 isolate min-h-screen overflow-hidden border-b border-border px-5 pb-20 pt-5 sm:px-8 lg:px-12">
           <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_80%_18%,color-mix(in_oklch,var(--primary),transparent_80%),transparent_44%),radial-gradient(ellipse_at_10%_100%,color-mix(in_oklch,var(--chart-2),transparent_94%),transparent_45%)]" />
           <div className="pointer-events-none absolute inset-0 -z-10 opacity-30 [background-image:radial-gradient(color-mix(in_oklch,var(--primary-foreground),transparent_75%)_0.7px,transparent_0.7px)] [background-size:14px_14px]" />

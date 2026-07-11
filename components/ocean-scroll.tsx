@@ -21,10 +21,6 @@ export function OceanScroll({ children }: Readonly<{ children: React.ReactNode }
 
       instanceRef.current = new Locomotive({
         lenisOptions: { lerp: 0.075, smoothWheel: true },
-        scrollCallback: ({ progress }) => {
-          document.documentElement.style.setProperty("--krill-scroll-progress", progress.toFixed(4));
-          window.dispatchEvent(new CustomEvent("krill:scroll", { detail: progress }));
-        },
       });
     }
 
