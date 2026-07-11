@@ -129,9 +129,17 @@
   html {
     @apply font-sans;
     background: var(--background);
+    scroll-behavior: smooth;
+    scroll-padding-top: 1rem;
   }
   button:not(:disabled), [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 

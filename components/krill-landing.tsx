@@ -5,8 +5,14 @@ import { ArrowDownRight, ArrowUpRight, Menu, Sparkles, X } from "lucide-react";
 import { useState } from "react";
 
 import { KrillLogo } from "@/components/krill-logo";
+import { DeliverablesSection } from "@/components/landing/deliverables-section";
+import { DifferenceSection } from "@/components/landing/difference-section";
+import { FaqSection } from "@/components/landing/faq-section";
+import { OfferingsSection } from "@/components/landing/offerings-section";
+import { ProcessSection } from "@/components/landing/process-section";
 import { OceanScroll } from "@/components/ocean-scroll";
 import { OrderBriefEstimator } from "@/components/order-brief";
+import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 
 function TideOrb() {
@@ -28,12 +34,6 @@ function TideOrb() {
   );
 }
 
-const process = [
-  ["01", "Signal", "Your precise brief tells us what must feel different about this particular brand."],
-  ["02", "Current", "We turn the signal into a creative and technical route with no black-box ambiguity."],
-  ["03", "Release", "You reserve the project, follow the build in your account, and launch with a living system."],
-];
-
 export default function KrillLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -44,23 +44,25 @@ export default function KrillLanding() {
   return (
     <OceanScroll>
       <main className="relative overflow-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
-        <section className="relative z-10 isolate min-h-screen overflow-hidden border-b border-border px-5 pb-20 pt-5 sm:px-8 lg:px-12">
+        <section id="top" className="relative z-10 isolate min-h-screen overflow-hidden border-b border-border px-5 pb-20 pt-5 sm:px-8 lg:px-12">
           <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_80%_18%,color-mix(in_oklch,var(--primary),transparent_80%),transparent_44%),radial-gradient(ellipse_at_10%_100%,color-mix(in_oklch,var(--chart-2),transparent_94%),transparent_45%)]" />
           <div className="pointer-events-none absolute inset-0 -z-10 opacity-30 [background-image:radial-gradient(color-mix(in_oklch,var(--primary-foreground),transparent_75%)_0.7px,transparent_0.7px)] [background-size:14px_14px]" />
           <div className="mx-auto max-w-7xl">
             <nav className="relative flex items-center justify-between rounded-full border border-border bg-card/45 px-4 py-3 shadow-[0_10px_36px_color-mix(in_oklch,var(--background),transparent_10%)] backdrop-blur-xl sm:px-5">
               <KrillLogo />
               <div className="hidden items-center gap-7 text-sm font-medium text-muted-foreground md:flex">
-                <a href="#process" className="transition hover:text-foreground">How it works</a>
-                <a href="#why-krill" className="transition hover:text-foreground">The difference</a>
-                <a href="#order" className="inline-flex h-8 items-center gap-1 rounded-full bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/80">Start an order <ArrowUpRight className="size-4" /></a>
+                <a href="#work" data-scroll-to className="transition hover:text-foreground">What we build</a>
+                <a href="#process" data-scroll-to className="transition hover:text-foreground">How it works</a>
+                <a href="#why-krill" data-scroll-to className="transition hover:text-foreground">The difference</a>
+                <a href="#order" data-scroll-to className="inline-flex h-8 items-center gap-1 rounded-full bg-primary px-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/80">Start an order <ArrowUpRight className="size-4" /></a>
               </div>
               <Button variant="outline" size="icon-sm" onClick={() => setMenuOpen((open) => !open)} className="rounded-full md:hidden" aria-label="Toggle navigation">{menuOpen ? <X /> : <Menu />}</Button>
               {menuOpen && (
                 <div className="absolute right-0 top-[4.3rem] z-30 flex w-56 flex-col gap-1 rounded-3xl border border-border bg-card p-3 shadow-2xl md:hidden">
-                  <a href="#process" onClick={closeMenu} className="rounded-2xl px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">How it works</a>
-                  <a href="#why-krill" onClick={closeMenu} className="rounded-2xl px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">The difference</a>
-                  <a href="#order" onClick={closeMenu} className="rounded-2xl bg-primary px-3 py-2 text-sm font-medium text-primary-foreground">Start an order</a>
+                  <a href="#work" data-scroll-to onClick={closeMenu} className="rounded-2xl px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">What we build</a>
+                  <a href="#process" data-scroll-to onClick={closeMenu} className="rounded-2xl px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">How it works</a>
+                  <a href="#why-krill" data-scroll-to onClick={closeMenu} className="rounded-2xl px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">The difference</a>
+                  <a href="#order" data-scroll-to onClick={closeMenu} className="rounded-2xl bg-primary px-3 py-2 text-sm font-medium text-primary-foreground">Start an order</a>
                 </div>
               )}
             </nav>
@@ -71,8 +73,8 @@ export default function KrillLanding() {
                 <h1 className="mt-8 max-w-3xl text-balance font-serif text-[clamp(4rem,8vw,8rem)] leading-[.78] tracking-[-.085em] text-foreground">A new current for brands with <em className="font-normal text-primary">depth.</em></h1>
                 <p className="mt-9 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl">Krill makes luxurious, living websites for brands ready to leave the swarm—where strategy, character, and a remarkable digital body move as one.</p>
                 <div className="mt-10 flex flex-wrap gap-3">
-                  <a href="#order" className="group inline-flex h-10 items-center gap-1.5 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground shadow-[0_12px_34px_color-mix(in_oklch,var(--primary),transparent_60%)] transition hover:bg-primary/80">Give us the signal <ArrowDownRight className="size-4 transition group-hover:translate-x-0.5 group-hover:translate-y-0.5" /></a>
-                  <a href="#process" className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground">Follow the current <ArrowDownRight className="size-4" /></a>
+                  <a href="#order" data-scroll-to className="group inline-flex h-10 items-center gap-1.5 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground shadow-[0_12px_34px_color-mix(in_oklch,var(--primary),transparent_60%)] transition hover:bg-primary/80">Give us the signal <ArrowDownRight className="size-4 transition group-hover:translate-x-0.5 group-hover:translate-y-0.5" /></a>
+                  <a href="#work" data-scroll-to className="inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground">Explore the studio <ArrowDownRight className="size-4" /></a>
                 </div>
                 <div className="mt-16 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-6 text-sm text-muted-foreground"><span><b className="mr-1 font-medium text-foreground">2–10 weeks</b> to launch</span><span><b className="mr-1 font-medium text-foreground">20% deposit</b> after scope confirmation</span></div>
               </motion.div>
@@ -81,44 +83,19 @@ export default function KrillLanding() {
           </div>
         </section>
 
-        <section id="process" className="relative z-10 border-b border-border px-5 py-20 sm:px-8 lg:px-12 lg:py-28" data-scroll-section>
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
-              <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-primary">No black water</p><h2 className="mt-4 max-w-md font-serif text-5xl leading-[.88] tracking-[-.075em] sm:text-6xl">A clear path below the surface.</h2></div>
-              <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground">The point is not to make every Krill site look the same. It is to bring enough clarity to the beginning that we can make each one unmistakably itself.</p>
-            </div>
-            <div className="mt-14 grid gap-px overflow-hidden rounded-[2rem] border border-border bg-border md:grid-cols-3">
-              {process.map(([number, title, copy], index) => (
-                <motion.article key={number} className="min-h-72 bg-card/95 p-7 sm:p-9" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.4 }} transition={{ delay: index * 0.08, duration: 0.5 }} data-scroll data-scroll-speed={index === 1 ? "0.12" : "0"}>
-                  <span className="font-mono text-xs text-primary">{number}</span>
-                  <h3 className="mt-16 text-3xl font-medium tracking-[-.055em] text-card-foreground">{title}</h3>
-                  <p className="mt-4 max-w-xs leading-relaxed text-muted-foreground">{copy}</p>
-                </motion.article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <OfferingsSection />
 
-        <section id="why-krill" className="relative z-10 px-5 py-20 sm:px-8 lg:px-12 lg:py-28" data-scroll-section>
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_0%_50%,color-mix(in_oklch,var(--primary),transparent_90%),transparent_35%)]" />
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
-            <div><p className="text-xs font-semibold uppercase tracking-[.18em] text-primary">Beyond decoration</p><h2 className="mt-4 max-w-lg font-serif text-5xl leading-[.88] tracking-[-.075em] sm:text-6xl">A website that behaves like a brand, not a brochure.</h2></div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                ["A considered shape", "Every choice starts with your category, audience, and business model—not a preset theme."],
-                ["A working system", "We distinguish between simple sites and builds that need commerce, bookings, accounts, or a custom workflow."],
-                ["A singular character", "Your visual character, references, and story give the implementation model meaningful creative direction."],
-                ["A visible route", "Your account, approved scope, deposit, and project space make the progress legible from day one."],
-              ].map(([title, copy]) => <div key={title} className="rounded-[1.5rem] border border-border bg-card/45 p-6"><h3 className="text-xl font-medium tracking-[-.04em] text-card-foreground">{title}</h3><p className="mt-3 text-sm leading-relaxed text-muted-foreground">{copy}</p></div>)}
-            </div>
-          </div>
-        </section>
+        <ProcessSection />
+
+        <DifferenceSection />
+
+        <DeliverablesSection />
 
         <OrderBriefEstimator />
 
-        <footer className="relative z-10 border-t border-border px-5 py-8 sm:px-8 lg:px-12">
-          <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 sm:flex-row sm:items-center"><KrillLogo /><p className="text-sm text-muted-foreground">For brands ready to find their own current.</p><button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="text-sm font-medium text-primary hover:text-foreground">Return to the surface ↑</button></div>
-        </footer>
+        <FaqSection />
+
+        <SiteFooter />
       </main>
     </OceanScroll>
   );

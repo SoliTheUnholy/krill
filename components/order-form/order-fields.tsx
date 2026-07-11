@@ -6,6 +6,7 @@ import { Controller } from "react-hook-form";
 import {
   OrderRadioOption,
   OrderToggleOption,
+  type OrderOptionVariant,
 } from "@/components/order-form/order-option";
 import {
   Field,
@@ -53,7 +54,7 @@ export function OrderTextField({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className="gap-1.5">
-          <FieldLabel htmlFor={`order-${name}`} className="text-xs sm:text-sm">
+          <FieldLabel htmlFor={`order-${name}`} className="text-xs lg:text-sm">
             {label}
           </FieldLabel>
           <Input
@@ -64,7 +65,12 @@ export function OrderTextField({
             aria-invalid={fieldState.invalid}
             className="h-10"
           />
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && (
+            <FieldError
+              errors={[fieldState.error]}
+              className="text-[10px] leading-tight lg:text-xs"
+            />
+          )}
         </Field>
       )}
     />
@@ -92,7 +98,7 @@ export function OrderTextareaField({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className="gap-1.5">
-          <FieldLabel htmlFor={`order-${name}`} className="text-xs sm:text-sm">
+          <FieldLabel htmlFor={`order-${name}`} className="text-xs lg:text-sm">
             {label}
           </FieldLabel>
           <Textarea
@@ -100,15 +106,24 @@ export function OrderTextareaField({
             id={`order-${name}`}
             placeholder={placeholder}
             rows={rows}
-            className="min-h-0 resize-none text-sm"
+            data-lenis-prevent
+            className={cn(
+              "min-h-14 resize-none overflow-y-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+              rows <= 2 ? "max-h-20" : "max-h-28",
+            )}
             aria-invalid={fieldState.invalid}
           />
           {description && (
-            <FieldDescription className="hidden sm:block">
+            <FieldDescription className="text-[10px] leading-snug sm:text-xs">
               {description}
             </FieldDescription>
           )}
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && (
+            <FieldError
+              errors={[fieldState.error]}
+              className="text-[10px] leading-tight lg:text-xs"
+            />
+          )}
         </Field>
       )}
     />
@@ -120,22 +135,24 @@ export function OrderRadioGrid<T extends string>({
   name,
   legend,
   options,
-  columns = 2,
+  variant = "row",
+  featureLast = false,
 }: {
   control: Control<OrderBrief>;
   name: RadioFieldName;
   legend?: string;
   options: Array<OrderOption<T>>;
-  columns?: 2 | 3;
+  variant?: OrderOptionVariant;
+  featureLast?: boolean;
 }) {
   return (
     <Controller
       name={name as FieldPath<OrderBrief>}
       control={control}
       render={({ field, fieldState }) => (
-        <FieldSet className="gap-2 sm:gap-3">
+        <FieldSet className="gap-2 lg:gap-3">
           {legend && (
-            <FieldLegend className="mb-1 text-xs sm:text-sm">
+            <FieldLegend className="mb-1 text-xs lg:text-sm">
               {legend}
             </FieldLegend>
           )}
@@ -144,16 +161,20 @@ export function OrderRadioGrid<T extends string>({
             value={String(field.value)}
             onValueChange={field.onChange}
             className={cn(
-              "grid gap-2",
-              columns === 3 ? "grid-cols-3" : "grid-cols-2",
+              "grid auto-rows-fr grid-cols-2 items-stretch gap-2",
+              featureLast &&
+                "[&>*:last-child:nth-child(odd)]:col-span-2",
             )}
           >
             {options.map((option) => (
               <OrderRadioOption
                 key={option.id}
                 option={option}
+                groupName={field.name}
                 checked={field.value === option.id}
                 invalid={fieldState.invalid}
+                onSelect={() => field.onChange(option.id)}
+                variant={variant}
               />
             ))}
           </RadioGroup>
@@ -178,13 +199,13 @@ export function OrderFeatureGrid({
       name="features"
       control={control}
       render={({ field, fieldState }) => (
-        <FieldSet className="gap-2 sm:gap-3">
+        <FieldSet className="gap-2 lg:gap-3">
           {legend && (
-            <FieldLegend className="mb-1 text-xs sm:text-sm">
+            <FieldLegend className="mb-1 text-xs lg:text-sm">
               {legend}
             </FieldLegend>
           )}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid auto-rows-fr grid-cols-2 items-stretch gap-2">
             {options.map((option) => {
               const selected = field.value.includes(option.id);
               return (

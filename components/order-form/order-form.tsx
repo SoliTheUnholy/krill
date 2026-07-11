@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import { OrderEstimate } from "@/components/order-form/order-estimate";
+import { OrderLiveEstimate } from "@/components/order-form/order-live-estimate";
 import { orderSteps } from "@/components/order-form/order-steps";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -27,8 +28,8 @@ function OrderAside() {
         Tell us what needs to exist.
       </h2>
       <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
-        Eleven short chapters capture the brand, business, functional, and
-        creative information needed for a useful estimate and a specific build.
+        Nine focused chapters turn your brand, ambition, and practical needs into
+        a useful estimate and a build brief that already feels specific to you.
       </p>
       <div className="mt-10 space-y-4 border-l border-border pl-5">
         {[
@@ -67,7 +68,9 @@ export function OrderBriefEstimator() {
   const form = useForm<OrderBrief>({
     resolver: zodResolver(orderBriefSchema),
     defaultValues: defaultOrderBrief,
-    mode: "onTouched",
+    mode: "onChange",
+    reValidateMode: "onChange",
+    delayError: 180,
   });
   const watchedBrief = useWatch({ control: form.control }) as OrderBrief;
   const liveEstimate = useMemo(
@@ -96,12 +99,12 @@ export function OrderBriefEstimator() {
   return (
     <section
       id="order"
-      className="relative z-10 h-[100svh] overflow-hidden border-y border-border px-2 py-2 sm:px-5 sm:py-5 lg:h-auto lg:overflow-visible lg:px-12 lg:py-28"
+      className="relative z-10 h-[100svh] overflow-hidden border-y border-border px-2 py-2 lg:h-auto lg:overflow-visible lg:px-12 lg:py-28"
     >
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_20%,color-mix(in_oklch,var(--primary),transparent_83%),transparent_47%),radial-gradient(ellipse_at_10%_85%,color-mix(in_oklch,var(--chart-2),transparent_88%),transparent_48%)]" />
       <div className="mx-auto h-full max-w-7xl lg:grid lg:h-auto lg:grid-cols-[.75fr_1.25fr] lg:gap-12">
         <OrderAside />
-        <div className="h-full overflow-hidden rounded-[1.35rem] border border-border bg-card/80 p-3 shadow-[0_24px_80px_color-mix(in_oklch,var(--background),transparent_25%)] backdrop-blur-xl sm:rounded-[2rem] sm:p-6 lg:min-h-[680px] lg:p-8">
+        <div className="h-full overflow-hidden rounded-[1.35rem] border border-border bg-card/80 p-3 shadow-[0_24px_80px_color-mix(in_oklch,var(--background),transparent_25%)] backdrop-blur-xl lg:min-h-[680px] lg:rounded-[2rem] lg:p-8">
           <form
             onSubmit={form.handleSubmit(setSubmittedBrief)}
             className="flex h-full min-h-0 flex-col"
@@ -124,33 +127,45 @@ export function OrderBriefEstimator() {
                 </motion.div>
               ) : (
                 <motion.div
-                  key={definition.id}
-                  initial={{ opacity: 0, x: 16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -16 }}
-                  transition={{ duration: 0.22 }}
+                  key="questionnaire"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   className="flex h-full min-h-0 flex-col"
                 >
+                  {/* The progress header deliberately sits outside the keyed
+                      chapter transition, so it never disappears between steps. */}
                   <header className="shrink-0">
                     <div className="flex items-center justify-between gap-4">
-                      <span className="text-[9px] font-semibold uppercase tracking-[.16em] text-primary sm:text-xs">
+                      <span className="text-[9px] font-semibold uppercase tracking-[.16em] text-primary lg:text-xs">
                         Chapter {step + 1} / {orderSteps.length}
                       </span>
-                      <span className="text-[11px] text-muted-foreground sm:text-sm">
+                      <span className="text-[11px] text-muted-foreground lg:text-sm">
                         {definition.label}
                       </span>
                     </div>
                     <Progress
                       value={((step + 1) / orderSteps.length) * 100}
-                      className="mt-2 gap-0 sm:mt-4"
+                      className="mt-2 gap-0 lg:mt-4"
                     />
                   </header>
 
-                  <div className="mt-3 min-h-0 flex-1 overflow-hidden sm:mt-6">
-                    <StepComponent form={form} />
+                  <div className="mt-3 min-h-0 flex-1 overflow-hidden lg:mt-6">
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.div
+                        key={definition.id}
+                        initial={{ opacity: 0, x: 18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -18 }}
+                        transition={{ duration: 0.22, ease: [0.2, 0.75, 0.25, 1] }}
+                        className="h-full"
+                      >
+                        <StepComponent form={form} />
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
 
-                  <footer className="mt-2 flex h-12 shrink-0 items-end justify-between gap-2 border-t border-border pt-2 sm:mt-5 sm:h-14 sm:pt-4">
+                  <footer className="mt-2 flex h-12 shrink-0 items-end justify-between gap-2 border-t border-border pt-2 lg:mt-5 lg:h-14 lg:pt-4">
                     <Button
                       type="button"
                       variant="ghost"
@@ -160,9 +175,7 @@ export function OrderBriefEstimator() {
                     >
                       <ArrowLeft /> <span className="hidden sm:inline">Back</span>
                     </Button>
-                    <div className="text-center text-[10px] text-muted-foreground sm:text-xs">
-                      ${liveEstimate.total.toLocaleString()} · {liveEstimate.weeks} wk
-                    </div>
+                    <OrderLiveEstimate estimate={liveEstimate} />
                     {lastStep ? (
                       <Button type="submit" className="h-9 rounded-full px-3 sm:px-5">
                         Estimate <Sparkles />

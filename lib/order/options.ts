@@ -73,21 +73,15 @@ export const primaryGoals: Array<OrderOption<PrimaryGoal>> = [
   { id: "community", label: "Gather people", detail: "Serve members, readers, or regulars.", icon: "users" },
 ];
 
-export const featureOptions: Array<
-  PricedOption<Feature> & { group: "foundation" | "advanced" }
-> = [
-  { id: "cms", label: "Content editor", detail: "Update pages and collections.", icon: "file-pen", group: "foundation", price: 300, weeks: 0.25 },
-  { id: "lead-capture", label: "Lead capture", detail: "Forms, enquiries, and calls to action.", icon: "message", group: "foundation", price: 200, weeks: 0.15 },
-  { id: "shop", label: "Online shop", detail: "Products, cart, checkout, and orders.", icon: "shopping-bag", group: "foundation", price: 750, weeks: 0.75 },
-  { id: "bookings", label: "Bookings", detail: "Appointments, tables, stays, or tickets.", icon: "calendar", group: "foundation", price: 500, weeks: 0.5 },
-  { id: "search", label: "Search & filters", detail: "Help visitors find the right thing quickly.", icon: "search", group: "foundation", price: 350, weeks: 0.3 },
-  { id: "media", label: "Rich media", detail: "Galleries, video, audio, or case studies.", icon: "image", group: "foundation", price: 350, weeks: 0.3 },
-  { id: "accounts", label: "Customer accounts", detail: "Profiles, saved details, and private access.", icon: "user-round", group: "advanced", price: 850, weeks: 0.75 },
-  { id: "membership", label: "Membership", detail: "Subscriptions, gated content, or recurring access.", icon: "credit-card", group: "advanced", price: 950, weeks: 1 },
-  { id: "portal", label: "Portal or dashboard", detail: "Customer data, status, or reporting views.", icon: "panels", group: "advanced", price: 1200, weeks: 1.25 },
-  { id: "community", label: "Community", detail: "Members, events, directories, or participation.", icon: "users", group: "advanced", price: 900, weeks: 0.9 },
-  { id: "integrations", label: "Integrations", detail: "CRM, email, maps, analytics, or automation.", icon: "plug", group: "advanced", price: 650, weeks: 0.6 },
-  { id: "custom-experience", label: "Custom or AI", detail: "Configurator, calculator, assistant, or workflow.", icon: "sliders", group: "advanced", price: 1300, weeks: 1.25 },
+export const featureOptions: Array<PricedOption<Feature>> = [
+  { id: "content", label: "Content system", detail: "Editable pages, stories, menus, or collections.", icon: "file-pen", price: 300, weeks: 0.25 },
+  { id: "leads-bookings", label: "Leads & bookings", detail: "Enquiries, appointments, tables, stays, or tickets.", icon: "calendar", price: 450, weeks: 0.4 },
+  { id: "commerce", label: "Commerce", detail: "Products, checkout, payments, and order flows.", icon: "shopping-bag", price: 800, weeks: 0.75 },
+  { id: "accounts-membership", label: "Accounts & access", detail: "Profiles, membership, subscriptions, or gated areas.", icon: "user-round", price: 950, weeks: 0.9 },
+  { id: "discovery", label: "Search & discovery", detail: "Search, filters, maps, categories, or recommendations.", icon: "search", price: 400, weeks: 0.35 },
+  { id: "media", label: "Rich storytelling", detail: "Galleries, video, audio, portfolios, or case studies.", icon: "image", price: 350, weeks: 0.3 },
+  { id: "portal", label: "Portal or dashboard", detail: "Private data, progress, reporting, or management views.", icon: "panels", price: 1200, weeks: 1.2 },
+  { id: "custom-connected", label: "Custom & connected", detail: "Integrations, automation, AI, calculators, or workflows.", icon: "plug", price: 1300, weeks: 1.2 },
 ];
 
 export const scaleOptions: Array<
@@ -112,9 +106,9 @@ export const websiteStyles: Array<OrderOption<WebsiteStyle>> = [
 ];
 
 export const motionLevels: Array<PricedOption<MotionLevel>> = [
-  { id: "still", label: "Still & precise", detail: "Almost no decorative movement.", icon: "target", price: 0, weeks: 0 },
-  { id: "subtle", label: "Subtle tactility", detail: "Refined reveals and feedback.", icon: "layers", price: 150, weeks: 0.15 },
-  { id: "expressive", label: "Expressive motion", detail: "Movement is part of the personality.", icon: "zap", price: 450, weeks: 0.4 },
+  { id: "still", label: "Still", detail: "Almost no decorative movement.", icon: "target", price: 0, weeks: 0 },
+  { id: "subtle", label: "Subtle", detail: "Refined reveals and feedback.", icon: "layers", price: 150, weeks: 0.15 },
+  { id: "expressive", label: "Expressive", detail: "Movement is part of the personality.", icon: "zap", price: 450, weeks: 0.4 },
   { id: "immersive", label: "Immersive", detail: "A cinematic, scroll-led experience.", icon: "sparkles", price: 900, weeks: 0.9 },
 ];
 
@@ -122,22 +116,22 @@ export const brandReadinessOptions: Array<
   PricedOption<Readiness>
 > = [
   { id: "ready", label: "Established", detail: "Identity and guidelines are ready.", icon: "file-pen", price: 0, weeks: 0 },
-  { id: "partial", label: "Partly formed", detail: "Useful pieces exist but need direction.", icon: "layers", price: 250, weeks: 0.25 },
-  { id: "starting", label: "Needs a visual route", detail: "We need to shape the digital personality.", icon: "sparkles", price: 600, weeks: 0.6 },
+  { id: "partial", label: "Some identity", detail: "Useful pieces exist but need direction.", icon: "layers", price: 250, weeks: 0.25 },
+  { id: "starting", label: "Need identity", detail: "We need to shape the digital personality.", icon: "sparkles", price: 600, weeks: 0.6 },
 ];
 
 export const contentReadinessOptions: Array<
   PricedOption<Readiness>
 > = [
-  { id: "ready", label: "Content ready", detail: "Writing and imagery mostly exist.", icon: "file-pen", price: 0, weeks: 0 },
-  { id: "partial", label: "Content in progress", detail: "We need to shape and complete it.", icon: "layers", price: 200, weeks: 0.2 },
-  { id: "starting", label: "Content help needed", detail: "Structure, words, and imagery need direction.", icon: "sparkles", price: 500, weeks: 0.5 },
+  { id: "ready", label: "Ready", detail: "Writing and imagery mostly exist.", icon: "file-pen", price: 0, weeks: 0 },
+  { id: "partial", label: "In progress", detail: "We need to shape and complete it.", icon: "layers", price: 200, weeks: 0.2 },
+  { id: "starting", label: "Need support", detail: "Structure, words, and imagery need direction.", icon: "sparkles", price: 500, weeks: 0.5 },
 ];
 
 export const urgencyOptions: Array<
-  OrderOption<Urgency> & { multiplier: number; minimumWeeks: number }
+  OrderOption<Urgency> & { priceMultiplier: number; timeMultiplier: number }
 > = [
-  { id: "studio", label: "Studio pace", detail: "Enough time to make the right decisions.", icon: "clock", multiplier: 1, minimumWeeks: 0 },
-  { id: "priority", label: "Priority", detail: "A firm date is approaching.", icon: "zap", multiplier: 1.15, minimumWeeks: 0 },
-  { id: "expedition", label: "Expedition", detail: "A compressed, highly responsive build.", icon: "rocket", multiplier: 1.35, minimumWeeks: 2 },
+  { id: "studio", label: "Studio", detail: "Enough time to make the right decisions.", icon: "clock", priceMultiplier: 1, timeMultiplier: 1 },
+  { id: "priority", label: "Priority", detail: "A protected schedule for a firm date.", icon: "zap", priceMultiplier: 1.15, timeMultiplier: 0.8 },
+  { id: "expedition", label: "Expedition", detail: "A compressed, highly responsive build.", icon: "rocket", priceMultiplier: 1.35, timeMultiplier: 0.6 },
 ];

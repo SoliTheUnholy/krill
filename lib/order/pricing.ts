@@ -13,6 +13,10 @@ function selected<T extends { id: string }>(options: T[], id: string): T {
   return options.find((option) => option.id === id) ?? options[0];
 }
 
+function ceilToHalfWeek(value: number) {
+  return Math.ceil(value * 2) / 2;
+}
+
 /**
  * Deterministic ballpark calculation.
  *
@@ -34,18 +38,24 @@ export function calculateEstimate(brief: OrderBrief): Estimate {
   const additions = [...features, motion, brand, content];
   const addedPrice = additions.reduce((total, item) => total + item.price, 0);
   const addedWeeks = additions.reduce((total, item) => total + item.weeks, 0);
+  const workloadWeeks = project.startingWeeks * scale.multiplier + addedWeeks;
   const total = Math.round(
     ((project.startingPrice + addedPrice) *
       scale.multiplier *
-      urgency.multiplier) /
+      urgency.priceMultiplier) /
       100,
   ) * 100;
+  const studioWeeks = Math.max(2, ceilToHalfWeek(workloadWeeks));
+  const paceIndex = Math.max(
+    0,
+    urgencyOptions.findIndex((option) => option.id === urgency.id),
+  );
+  const paceFloor = urgency.id === "studio" ? 2 : urgency.id === "priority" ? 1.5 : 1;
   const weeks = Math.max(
-    2,
-    Math.ceil(
-      (project.startingWeeks * scale.multiplier + addedWeeks) *
-        urgency.multiplier +
-        urgency.minimumWeeks,
+    paceFloor,
+    Math.min(
+      ceilToHalfWeek(workloadWeeks * urgency.timeMultiplier),
+      studioWeeks - paceIndex * 0.5,
     ),
   );
 

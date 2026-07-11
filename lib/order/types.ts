@@ -26,18 +26,14 @@ export const goalIds = [
 ] as const;
 
 export const featureIds = [
-  "cms",
-  "lead-capture",
-  "shop",
-  "bookings",
-  "search",
+  "content",
+  "leads-bookings",
+  "commerce",
+  "accounts-membership",
+  "discovery",
   "media",
-  "accounts",
-  "membership",
   "portal",
-  "community",
-  "integrations",
-  "custom-experience",
+  "custom-connected",
 ] as const;
 
 export const scaleIds = ["focused", "standard", "expanded", "flagship"] as const;
@@ -113,7 +109,7 @@ export const defaultOrderBrief: OrderBrief = {
   audience: "",
   projectType: "brand",
   goal: "presence",
-  features: ["cms", "lead-capture"],
+  features: ["content", "leads-bookings"],
   scale: "standard",
   websiteStyle: "editorial",
   motionLevel: "subtle",
