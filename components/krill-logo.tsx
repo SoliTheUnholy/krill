@@ -12,11 +12,11 @@ export function KrillLogo({ className }: { className?: string }) {
       href="/"
       aria-label="Krill home"
       className={cn(
-        "group relative flex justify-center font-serif mr-auto w-fit items-center text-lg font-bold text-primary",
+        "group relative flex justify-center overflow-hidden font-serif text-black h-8 text-xl mr-auto w-fit bg-white font-semibold rounded-full pr-4 pl-3 items-center",
         className,
       )}
     >
-      <Image src="/krill.png" alt="Krill-Logo" width={50} height={50} />
+      <Image src="/krill-logo.jpg" alt="Krill-Logo" width={30} height={30} />
       Krill
     </Link>
   );
