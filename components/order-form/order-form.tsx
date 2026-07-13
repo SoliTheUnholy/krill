@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -12,11 +12,19 @@ import { orderSteps } from "@/components/order-form/order-steps";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { calculateEstimate } from "@/lib/order/pricing";
+import { requestOceanScroll } from "@/lib/ocean-scroll-events";
 import {
   defaultOrderBrief,
   orderBriefSchema,
   type OrderBrief,
 } from "@/lib/order/types";
+
+const shellLayoutSpring = {
+  type: "spring" as const,
+  stiffness: 230,
+  damping: 25,
+  mass: 0.75,
+};
 
 function OrderAside() {
   return (
@@ -28,8 +36,9 @@ function OrderAside() {
         Tell us what needs to exist.
       </h2>
       <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
-        Nine focused chapters turn your brand, ambition, and practical needs into
-        a useful estimate and a build brief that already feels specific to you.
+        Nine focused chapters turn your brand, ambition, and practical needs
+        into a useful estimate and a build brief that already feels specific to
+        you.
       </p>
       <div className="mt-10 space-y-4 border-l border-border pl-5">
         {[
@@ -87,7 +96,10 @@ export function OrderBriefEstimator() {
 
   async function next() {
     const valid = await form.trigger(definition.fields, { shouldFocus: true });
-    if (valid) setStep((current) => Math.min(current + 1, orderSteps.length - 1));
+    if (valid) {
+      setStep((current) => Math.min(current + 1, orderSteps.length - 1));
+      requestOceanScroll({ target: "#order", duration: 0.76 });
+    }
   }
 
   function restart() {
@@ -97,105 +109,137 @@ export function OrderBriefEstimator() {
   }
 
   return (
-    <section
-      id="order"
-      className="relative z-10 overflow-hidden border-y border-border px-2 py-2 lg:h-auto lg:overflow-visible lg:px-12 lg:py-28"
-    >
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_20%,color-mix(in_oklch,var(--primary),transparent_83%),transparent_47%),radial-gradient(ellipse_at_10%_85%,color-mix(in_oklch,var(--chart-2),transparent_88%),transparent_48%)]" />
-      <div className="mx-auto h-full max-w-7xl lg:grid lg:h-auto lg:grid-cols-[.75fr_1.25fr] lg:gap-12">
-        <OrderAside />
-        <div className="h-full overflow-hidden rounded-[1.35rem] border border-border bg-card/80 p-3 shadow-[0_24px_80px_color-mix(in_oklch,var(--background),transparent_25%)] backdrop-blur-xl lg:min-h-[680px] lg:rounded-[2rem] lg:p-8">
-          <form
-            onSubmit={form.handleSubmit(setSubmittedBrief)}
-            className="flex h-full min-h-0 flex-col"
+    <LayoutGroup id="order-estimator-shell">
+      <motion.section
+        id="order"
+        layout="size"
+        transition={{ layout: shellLayoutSpring }}
+        className="relative z-10 grid min-h-svh px-2 py-2 lg:h-auto lg:overflow-visible lg:px-12 lg:py-28"
+      >
+        {/* This glow lives inside the projected section so it inherits the
+            exact same height spring as the form shell. */}
+        <motion.div
+          layout="size"
+          transition={{ layout: shellLayoutSpring }}
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_20%,color-mix(in_oklch,var(--primary),transparent_83%),transparent_47%),radial-gradient(ellipse_at_10%_85%,color-mix(in_oklch,var(--chart-2),transparent_88%),transparent_48%)]"
+        />
+        <motion.div
+          layout="size"
+          transition={{ layout: shellLayoutSpring }}
+          className="mx-auto max-w-7xl lg:grid lg:h-auto lg:grid-cols-[.75fr_1.25fr] lg:gap-12"
+        >
+          <OrderAside />
+          <motion.div
+            layout="size"
+            transition={{ layout: shellLayoutSpring }}
+            className="h-full overflow-hidden rounded-[1.35rem] border border-border bg-card/80 p-3 shadow-[0_24px_80px_color-mix(in_oklch,var(--background),transparent_25%)] backdrop-blur-xl lg:min-h-[680px] lg:rounded-[2rem] lg:p-8"
           >
-            <AnimatePresence mode="wait">
-              {submittedBrief && submittedEstimate ? (
-                <motion.div
-                  key="estimate"
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.28 }}
-                  className="h-full"
-                >
-                  <OrderEstimate
-                    brief={submittedBrief}
-                    estimate={submittedEstimate}
-                    onRestart={restart}
-                  />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="questionnaire"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex h-full min-h-0 flex-col"
-                >
-                  {/* The progress header deliberately sits outside the keyed
-                      chapter transition, so it never disappears between steps. */}
-                  <header className="shrink-0">
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-[9px] font-semibold uppercase tracking-[.16em] text-primary lg:text-xs">
-                        Chapter {step + 1} / {orderSteps.length}
-                      </span>
-                      <span className="text-[11px] text-muted-foreground lg:text-sm">
-                        {definition.label}
-                      </span>
-                    </div>
-                    <Progress
-                      value={((step + 1) / orderSteps.length) * 100}
-                      className="mt-2 gap-0 lg:mt-4"
+            <form
+              onSubmit={form.handleSubmit(setSubmittedBrief)}
+              className="flex h-full min-h-0 flex-col"
+            >
+              <AnimatePresence mode="wait">
+                {submittedBrief && submittedEstimate ? (
+                  <motion.div
+                    key="estimate"
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.28 }}
+                    className="h-full"
+                  >
+                    <OrderEstimate
+                      brief={submittedBrief}
+                      estimate={submittedEstimate}
+                      onRestart={restart}
                     />
-                  </header>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="questionnaire"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex h-full min-h-0 flex-col"
+                  >
+                    {/* The progress header deliberately sits outside the keyed
+                      chapter transition, so it never disappears between steps. */}
+                    <header className="shrink-0">
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="text-[9px] font-semibold uppercase tracking-[.16em] text-primary lg:text-xs">
+                          Chapter {step + 1} / {orderSteps.length}
+                        </span>
+                        <span className="text-[11px] text-muted-foreground lg:text-sm">
+                          {definition.label}
+                        </span>
+                      </div>
+                      <Progress
+                        value={((step + 1) / orderSteps.length) * 100}
+                        className="mt-2 gap-0 lg:mt-4"
+                      />
+                    </header>
 
-                  <div className="mt-3 min-h-0 flex-1 overflow-hidden lg:mt-6">
-                    <AnimatePresence mode="wait" initial={false}>
-                      <motion.div
-                        key={definition.id}
-                        initial={{ opacity: 0, x: 18 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -18 }}
-                        transition={{ duration: 0.22, ease: [0.2, 0.75, 0.25, 1] }}
-                        className="h-full"
-                      >
-                        <StepComponent form={form} />
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-
-                  <footer className="mt-2 flex h-12 shrink-0 items-end justify-between gap-2 border-t border-border pt-2 lg:mt-5 lg:h-14 lg:pt-4">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => setStep((current) => Math.max(0, current - 1))}
-                      disabled={step === 0}
-                      className="h-9 rounded-full px-2 text-muted-foreground disabled:opacity-0 sm:px-3"
+                    <motion.div
+                      layout="size"
+                      transition={{ layout: shellLayoutSpring }}
+                      className="mt-3 min-h-0 flex-1 overflow-hidden lg:mt-6"
                     >
-                      <ArrowLeft /> <span className="hidden sm:inline">Back</span>
-                    </Button>
-                    <OrderLiveEstimate estimate={liveEstimate} />
-                    {lastStep ? (
-                      <Button type="submit" className="h-9 rounded-full px-3 sm:px-5">
-                        Estimate <Sparkles />
-                      </Button>
-                    ) : (
+                      <AnimatePresence mode="popLayout" initial={false}>
+                        <motion.div
+                          key={definition.id}
+                          layout="position"
+                          initial={{ opacity: 0, x: 18 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -18 }}
+                          transition={{
+                            duration: 0.22,
+                            ease: [0.2, 0.75, 0.25, 1],
+                          }}
+                          className="h-full"
+                        >
+                          <StepComponent form={form} />
+                        </motion.div>
+                      </AnimatePresence>
+                    </motion.div>
+
+                    <footer className="mt-2 flex h-12 shrink-0 items-end justify-between gap-2 border-t border-border pt-2 lg:mt-5 lg:h-14 lg:pt-4">
                       <Button
                         type="button"
-                        onClick={next}
-                        className="h-9 rounded-full px-3 sm:px-5"
+                        variant="ghost"
+                        onClick={() =>
+                          setStep((current) => Math.max(0, current - 1))
+                        }
+                        disabled={step === 0}
+                        className="h-9 rounded-full px-2 text-muted-foreground disabled:opacity-0 sm:px-3"
                       >
-                        Next <ArrowRight />
+                        <ArrowLeft />{" "}
+                        <span className="hidden sm:inline">Back</span>
                       </Button>
-                    )}
-                  </footer>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </form>
-        </div>
-      </div>
-    </section>
+                      <OrderLiveEstimate estimate={liveEstimate} />
+                      {lastStep ? (
+                        <Button
+                          type="submit"
+                          className="h-9 rounded-full px-3 sm:px-5"
+                        >
+                          Estimate <Sparkles />
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          onClick={next}
+                          className="h-9 rounded-full px-3 sm:px-5"
+                        >
+                          Next <ArrowRight />
+                        </Button>
+                      )}
+                    </footer>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </form>
+          </motion.div>
+        </motion.div>
+      </motion.section>
+    </LayoutGroup>
   );
 }
