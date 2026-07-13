@@ -71,10 +71,12 @@ function OptionIcon({
   icon,
   active,
   large = false,
+  className,
 }: {
   icon: OrderIcon;
   active?: boolean;
   large?: boolean;
+  className?: string;
 }) {
   const Icon = icons[icon];
 
@@ -84,6 +86,7 @@ function OptionIcon({
         "grid shrink-0 place-items-center border border-border bg-muted/55 text-muted-foreground transition-colors",
         large ? "size-10 rounded-xl" : "size-8 rounded-lg",
         active && "border-primary/25 bg-primary/10 text-primary",
+        className,
       )}
     >
       <Icon className={large ? "size-5" : "size-4"} strokeWidth={1.55} />
@@ -103,6 +106,7 @@ export function OrderRadioOption<T extends string>({
   invalid,
   onSelect,
   variant = "row",
+  className,
 }: {
   option: OrderOption<T>;
   groupName: string;
@@ -110,22 +114,26 @@ export function OrderRadioOption<T extends string>({
   invalid?: boolean;
   onSelect: () => void;
   variant?: OrderOptionVariant;
+  className?: string;
 }) {
   const id = `order-${groupName}-${option.id}`;
   const titleId = `${id}-title`;
   const detailId = `${id}-detail`;
 
   return (
-    <div className="block h-full w-full cursor-pointer" onClick={onSelect}>
+    <div
+      className={cn("block h-full w-full cursor-pointer", className)}
+      onClick={onSelect}
+    >
       <Field
         orientation="horizontal"
         data-invalid={invalid}
         data-selected={checked}
         className={cn(
-          "relative h-full overflow-hidden rounded-2xl border border-border bg-card/45 p-3 transition hover:border-primary/45 hover:bg-card",
+          "relative h-full overflow-hidden rounded-2xl border border-border bg-card/45 transition hover:border-primary/45 hover:bg-card",
           variant === "tile"
-            ? "min-h-[7.25rem] flex-col items-stretch gap-2.5"
-            : "min-h-[5.5rem] items-start gap-2.5",
+            ? "min-h-[7.25rem] flex-col items-stretch gap-2.5 p-3"
+            : "min-h-[4.25rem] items-stretch gap-2.5 p-2.5 sm:min-h-[5.5rem] sm:p-3",
           checked &&
             "border-primary/70 bg-primary/10 shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--primary),transparent_30%),0_14px_34px_color-mix(in_oklch,var(--primary),transparent_88%)]",
         )}
@@ -143,16 +151,16 @@ export function OrderRadioOption<T extends string>({
                 className="size-4 shrink-0 border-border bg-muted/70"
               />
             </div>
-            <FieldContent className="min-w-0 gap-1 overflow-hidden">
+            <FieldContent className="min-w-0 gap-1">
               <FieldTitle
                 id={titleId}
-                className="line-clamp-1 w-full text-sm leading-tight text-card-foreground"
+                className="w-full text-sm leading-tight text-card-foreground"
               >
                 {option.label}
               </FieldTitle>
               <FieldDescription
                 id={detailId}
-                className="line-clamp-2 text-[10px] leading-snug sm:text-[11px]"
+                className="text-[11px] leading-snug sm:text-xs"
               >
                 {option.detail}
               </FieldDescription>
@@ -160,29 +168,37 @@ export function OrderRadioOption<T extends string>({
           </>
         ) : (
           <>
-            <OptionIcon icon={option.icon} active={checked} />
-            <FieldContent className="min-w-0 gap-1 overflow-hidden">
+            {/* On narrow phones the icon and control become a compact signal
+                rail. It preserves most of the card width for useful copy. */}
+            <div className="flex shrink-0 flex-col items-center justify-between gap-1.5 self-stretch border-r border-border/70 pr-3">
+              <OptionIcon
+                icon={option.icon}
+                active={checked}
+                className="size-7 rounded-md sm:size-8 sm:rounded-lg"
+              />
+              <RadioGroupItem
+                id={id}
+                value={option.id}
+                aria-invalid={invalid}
+                aria-labelledby={titleId}
+                aria-describedby={detailId}
+                className="size-4 shrink-0 border-border bg-muted/70"
+              />
+            </div>
+            <FieldContent className="min-w-0 justify-center gap-1">
               <FieldTitle
                 id={titleId}
-                className="line-clamp-1 w-full text-xs leading-tight text-card-foreground sm:text-sm"
+                className="w-full text-sm leading-tight text-card-foreground"
               >
                 {option.label}
               </FieldTitle>
               <FieldDescription
                 id={detailId}
-                className="line-clamp-2 text-[10px] leading-snug sm:text-[11px]"
+                className="text-[11px] leading-snug sm:text-xs"
               >
                 {option.detail}
               </FieldDescription>
             </FieldContent>
-            <RadioGroupItem
-              id={id}
-              value={option.id}
-              aria-invalid={invalid}
-              aria-labelledby={titleId}
-              aria-describedby={detailId}
-              className="size-4 shrink-0 border-border bg-muted/70"
-            />
           </>
         )}
       </Field>
@@ -206,30 +222,36 @@ export function OrderToggleOption<T extends string>({
       onClick={onToggle}
       aria-pressed={selected}
       className={cn(
-        "h-[5.5rem] justify-start gap-2.5 overflow-hidden rounded-2xl border-border bg-card/45 p-3 text-left whitespace-normal",
+        "h-auto min-h-[4.25rem] justify-start gap-2.5 rounded-2xl border-border bg-card/45 p-2.5 text-left whitespace-normal sm:min-h-[5.5rem] sm:p-3",
         "hover:border-primary/50 hover:bg-card",
         selected &&
           "border-primary bg-primary/10 text-card-foreground shadow-[inset_0_0_0_1px_var(--primary)]",
       )}
     >
-      <OptionIcon icon={option.icon} active={selected} />
-      <span className="min-w-0 overflow-hidden">
-        <span className="line-clamp-1 text-xs font-medium leading-tight tracking-[-0.02em] sm:text-sm">
-          {option.label}
-        </span>
-        <span className="mt-1 line-clamp-2 text-[10px] font-normal leading-snug text-muted-foreground sm:text-[11px]">
-          {option.detail}
+      <span className="flex shrink-0 flex-col items-center justify-between gap-1.5 self-stretch border-r border-border/70 pr-3">
+        <OptionIcon
+          icon={option.icon}
+          active={selected}
+          className="size-7 rounded-md sm:size-8 sm:rounded-lg"
+        />
+        <span
+          className={cn(
+            "grid size-3.5 shrink-0 place-items-center rounded-full border lg:size-4",
+            selected
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-border bg-muted",
+          )}
+        >
+          {selected && <span className="size-1 rounded-full bg-current" />}
         </span>
       </span>
-      <span
-        className={cn(
-          "ml-auto grid size-3.5 shrink-0 place-items-center rounded-full border lg:size-4",
-          selected
-            ? "border-primary bg-primary text-primary-foreground"
-            : "border-border bg-muted",
-        )}
-      >
-        {selected && <span className="size-1 rounded-full bg-current" />}
+      <span className="min-w-0 self-center">
+        <span className="block text-sm font-medium leading-tight tracking-[-0.02em]">
+          {option.label}
+        </span>
+        <span className="mt-1 block text-[11px] font-normal leading-snug text-muted-foreground sm:text-xs">
+          {option.detail}
+        </span>
       </span>
     </Button>
   );

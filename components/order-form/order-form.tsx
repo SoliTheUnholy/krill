@@ -99,7 +99,7 @@ export function OrderBriefEstimator() {
   return (
     <section
       id="order"
-      className="relative z-10 h-[100svh] overflow-hidden border-y border-border px-2 py-2 lg:h-auto lg:overflow-visible lg:px-12 lg:py-28"
+      className="relative z-10 overflow-hidden border-y border-border px-2 py-2 lg:h-auto lg:overflow-visible lg:px-12 lg:py-28"
     >
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_20%,color-mix(in_oklch,var(--primary),transparent_83%),transparent_47%),radial-gradient(ellipse_at_10%_85%,color-mix(in_oklch,var(--chart-2),transparent_88%),transparent_48%)]" />
       <div className="mx-auto h-full max-w-7xl lg:grid lg:h-auto lg:grid-cols-[.75fr_1.25fr] lg:gap-12">

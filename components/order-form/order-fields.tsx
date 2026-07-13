@@ -63,7 +63,7 @@ export function OrderTextField({
             placeholder={placeholder}
             autoComplete={autoComplete}
             aria-invalid={fieldState.invalid}
-            className="h-10"
+            className="h-10 text-base"
           />
           {fieldState.invalid && (
             <FieldError
@@ -108,7 +108,7 @@ export function OrderTextareaField({
             rows={rows}
             data-lenis-prevent
             className={cn(
-              "min-h-14 resize-none overflow-y-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+              "min-h-14 resize-none overflow-y-auto text-base [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
               rows <= 2 ? "max-h-20" : "max-h-28",
             )}
             aria-invalid={fieldState.invalid}
@@ -161,12 +161,13 @@ export function OrderRadioGrid<T extends string>({
             value={String(field.value)}
             onValueChange={field.onChange}
             className={cn(
-              "grid auto-rows-fr grid-cols-2 items-stretch gap-2",
-              featureLast &&
-                "[&>*:last-child:nth-child(odd)]:col-span-2",
+              "grid auto-rows-fr items-stretch gap-2",
+              variant === "tile"
+                ? "grid-cols-2"
+                : "grid-cols-1 gap-1.5 min-[480px]:grid-cols-2 min-[480px]:gap-2",
             )}
           >
-            {options.map((option) => (
+            {options.map((option, index) => (
               <OrderRadioOption
                 key={option.id}
                 option={option}
@@ -175,6 +176,14 @@ export function OrderRadioGrid<T extends string>({
                 invalid={fieldState.invalid}
                 onSelect={() => field.onChange(option.id)}
                 variant={variant}
+                className={cn(
+                  featureLast &&
+                    index === options.length - 1 &&
+                    options.length % 2 === 1 &&
+                    (variant === "tile"
+                      ? "col-span-2"
+                      : "min-[480px]:col-span-2"),
+                )}
               />
             ))}
           </RadioGroup>
@@ -205,7 +214,7 @@ export function OrderFeatureGrid({
               {legend}
             </FieldLegend>
           )}
-          <div className="grid auto-rows-fr grid-cols-2 items-stretch gap-2">
+          <div className="grid auto-rows-fr grid-cols-1 items-stretch gap-1.5 min-[480px]:grid-cols-2 min-[480px]:gap-2">
             {options.map((option) => {
               const selected = field.value.includes(option.id);
               return (

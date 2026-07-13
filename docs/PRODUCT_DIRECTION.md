@@ -33,8 +33,6 @@ Order logic is deliberately split by responsibility: `lib/order/types.ts` owns s
 
 ## Mobile form constraint
 
-The public order section is deliberately `100svh` on mobile. Neither the form nor an inner form region should scroll. Each chapter must fit between the persistent progress header and navigation footer. Preserve this constraint when adding fields: add a chapter or shorten an existing one rather than introducing `overflow-y-auto`.
-
 Choice layouts never exceed two columns. Major creative dimensions such as scale, movement, and urgency use taller icon-above-copy tiles; denser business and readiness choices use compact icon-beside-copy cards. Descriptions remain visible at every breakpoint, and the final card in an odd three-choice group spans the row to create deliberate visual rhythm. The shadcn `Progress` header remains mounted while only the chapter body transitions. Order textareas retain shadcn's `field-sizing-content` behaviour, grow as the customer writes, and hide platform scrollbars at their safe viewport-aware maximum.
 
 ## Estimator policy

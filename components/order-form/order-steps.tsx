@@ -293,8 +293,9 @@ function TimingStep({ form }: OrderStepProps) {
 
 /**
  * Nine short chapters preserve a no-scroll mobile form while keeping every
- * choice self-explanatory. Major creative decisions receive their own visual
- * chapter instead of being compressed into ambiguous segmented controls.
+ * choice self-explanatory. Information-heavy grids become full-width signal
+ * cards on narrow phones; major creative decisions retain a two-column tile
+ * rhythm instead of being compressed into ambiguous segmented controls.
  */
 export const orderSteps: OrderStepDefinition[] = [
   {
