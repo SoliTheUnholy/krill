@@ -108,7 +108,7 @@ export function OrderTextareaField({
             rows={rows}
             data-lenis-prevent
             className={cn(
-              "min-h-14 resize-none overflow-y-auto text-base [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+              "min-h-20 resize-none overflow-y-auto text-base [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
               rows <= 2 ? "max-h-20" : "max-h-28",
             )}
             aria-invalid={fieldState.invalid}

@@ -182,7 +182,7 @@ export function OrderBriefEstimator() {
                     <motion.div
                       layout="size"
                       transition={{ layout: shellLayoutSpring }}
-                      className="mt-3 min-h-0 flex-1 overflow-hidden lg:mt-6"
+                      className="mt-3 min-h-0 flex-1 lg:mt-6"
                     >
                       <AnimatePresence mode="popLayout" initial={false}>
                         <motion.div
